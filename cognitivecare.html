@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CognitiveCare – Brain Wellness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --border: rgba(0,0,0,0.09);
+    --border2: rgba(0,0,0,0.15);
+    --text: #1a1814;
+    --muted: #7a7568;
+    --hint: #b0aa9f;
+    --accent: #3d6b4f;
+    --accent-light: #e8f2ec;
+    --accent2: #7c5cbf;
+    --accent2-light: #f0ebfe;
+    --accent3: #c4601a;
+    --accent3-light: #fdf0e8;
+    --blue: #2c5fa8;
+    --blue-light: #e8eefa;
+    --red: #b83232;
+    --red-light: #fceaea;
+    --gold: #a07830;
+    --gold-light: #fdf4e3;
+    --r: 16px;
+    --rs: 10px;
+    --font: 'DM Sans', sans-serif;
+    --font-serif: 'DM Serif Display', serif;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 80px;
+  }
+
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 0.5px solid var(--border2);
+    display: flex;
+    padding: 8px 0 env(safe-area-inset-bottom, 0);
+    z-index: 200;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 4px 2px;
+    font-family: var(--font);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--hint);
+    transition: color 0.15s;
+    border-top: 2px solid transparent;
+    letter-spacing: 0.02em;
+  }
+  .nav-btn i { font-size: 22px; }
+  .nav-btn.active { color: var(--accent); border-top-color: var(--accent); }
+
+  .page { display: none; max-width: 540px; margin: 0 auto; padding: 0 16px 16px; }
+  .page.active { display: block; }
+
+  .page-header {
+    padding: 20px 0 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .page-title { font-family: var(--font-serif); font-size: 28px; font-weight: 400; line-height: 1.15; }
+  .page-sub { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--r);
+    border: 0.5px solid var(--border);
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .card-sm { padding: 12px 16px; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 20px; letter-spacing: 0.03em;
+  }
+  .pill-green  { background: var(--accent-light);  color: var(--accent); }
+  .pill-purple { background: var(--accent2-light); color: var(--accent2); }
+  .pill-orange { background: var(--accent3-light); color: var(--accent3); }
+  .pill-blue   { background: var(--blue-light);    color: var(--blue); }
+  .pill-gold   { background: var(--gold-light);    color: var(--gold); }
+  .pill-red    { background: var(--red-light);     color: var(--red); }
+
+  .section-label {
+    font-size: 11px; font-weight: 600; color: var(--hint);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin: 20px 0 8px;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 13px 24px;
+    border-radius: 50px; font-size: 15px; font-weight: 500;
+    cursor: pointer; border: none; transition: all 0.15s;
+    font-family: var(--font); letter-spacing: 0.01em;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #2f5540; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 0.5px solid var(--border2); }
+  .btn-full { width: 100%; display: flex; }
+  .btn-lg { padding: 15px 28px; font-size: 16px; }
+  .btn-icon { padding: 13px 16px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+
+  .stat {
+    background: var(--surface2);
+    border-radius: var(--rs);
+    padding: 14px 16px;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .stat-val { font-size: 26px; font-weight: 500; line-height: 1; }
+  .stat-unit { font-size: 13px; color: var(--muted); font-weight: 400; }
+
+  .progress-bar { height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin: 8px 0 4px; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+
+  .streak-row { display: flex; gap: 6px; margin: 12px 0; }
+  .sday {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--surface2); border: 0.5px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 600; color: var(--hint); gap: 1px;
+  }
+  .sday.done { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .sday.today { border: 1.5px solid var(--accent); color: var(--accent); }
+  .sday i { font-size: 13px; }
+
+  .task-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 0; border-bottom: 0.5px solid var(--border);
+  }
+  .task-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .task-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .task-info { flex: 1; }
+  .task-name { font-size: 14px; font-weight: 500; }
+  .task-sub  { font-size: 12px; color: var(--muted); }
+  .task-cta  { font-size: 13px; font-weight: 500; color: var(--accent); cursor: pointer; white-space: nowrap; }
+
+  .gamma-screen {
+    width: 100%; aspect-ratio: 16/9;
+    background: #0a0a0a;
+    border-radius: var(--r);
+    position: relative; overflow: hidden;
+    margin-bottom: 20px;
+  }
+  #gamma-flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+  .gamma-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 6px; color: rgba(255,255,255,0.7);
+    font-size: 13px; pointer-events: none;
+  }
+  .gamma-hz { font-family: var(--font-serif); font-size: 48px; color: #fff; font-weight: 400; line-height: 1; }
+
+  .timer-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+  .timer-ring { position: relative; width: 110px; height: 110px; }
+  .timer-ring svg { transform: rotate(-90deg); }
+  #gamma-ring-fill { stroke-dasharray: 283; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
+  .timer-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+  .timer-big { font-size: 20px; font-weight: 500; }
+  .timer-lbl { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+  .dur-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .dur-opt {
+    flex: 1; padding: 9px 4px; border-radius: 10px; border: 0.5px solid var(--border2);
+    text-align: center; font-size: 13px; font-weight: 500; cursor: pointer;
+    background: var(--surface); color: var(--muted); transition: all 0.15s; font-family: var(--font);
+  }
+  .dur-opt.selected { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  #game-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    margin: 12px 0;
+  }
+  .mcard {
+    aspect-ratio: 1; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+    background: var(--accent2); user-select: none;
+    border: 0.5px solid transparent;
+  }
+  .mcard span { opacity: 0; transition: opacity 0.1s; }
+  .mcard.show { background: var(--surface); border-color: var(--border2); }
+  .mcard.show span { opacity: 1; }
+  .mcard.matched { background: var(--accent-light); border-color: var(--accent); }
+  .mcard:active { transform: scale(0.92); }
+
+  .game-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .game-status { text-align: center; font-size: 13px; color: var(--muted); min-height: 20px; margin-bottom: 8px; }
+
+  .habit-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 0; border-bottom: 0.5px solid var(--border);
+  }
+  .habit-row:last-child { border-bottom: none; }
+  .habit-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .habit-info { flex: 1; min-width: 0; }
+  .habit-name { font-size: 14px; font-weight: 500; }
+  .habit-desc { font-size: 11px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .toggle {
+    width: 44px; height: 26px; border-radius: 13px;
+    background: var(--border2); position: relative;
+    cursor: pointer; border: none; transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle::after {
+    content: ''; position: absolute; width: 20px; height: 20px;
+    background: #fff; border-radius: 50%; top: 3px; left: 3px;
+    transition: left 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  }
+  .toggle.on { background: var(--accent); }
+  .toggle.on::after { left: 21px; }
+
+  .breath-center { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
+  #breath-circle {
+    width: 150px; height: 150px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center;
+    justify-content: center; color: #fff; font-size: 28px; font-weight: 500;
+    transition: width 1s ease, height 1s ease, background 1s ease;
+    margin: 12px 0 16px;
+  }
+  #breath-phase { font-family: var(--font-serif); font-size: 24px; color: var(--accent); margin-bottom: 2px; }
+  #breath-info  { font-size: 13px; color: var(--muted); }
+
+  .science-note {
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--rs) var(--rs) 0;
+    padding: 12px 14px;
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .science-note strong { color: var(--text); }
+
+  #habit-score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+
+  #splash {
+    position: fixed; inset: 0;
+    background: var(--accent);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 999; transition: opacity 0.6s ease;
+  }
+  #splash h1 {
+    font-family: var(--font-serif); font-size: 38px;
+    color: #fff; font-weight: 400; margin-top: 16px; letter-spacing: -0.5px;
+  }
+  #splash p { color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 8px; }
+  .splash-logo {
+    width: 72px; height: 72px; background: rgba(255,255,255,0.15);
+    border-radius: 20px; display: flex; align-items: center; justify-content: center;
+  }
+  .splash-logo i { font-size: 36px; color: #fff; }
+
+  @media (min-width: 540px) {
+    .nav { left: 50%; right: auto; width: 540px; transform: translateX(-50%);
+           border-radius: 20px 20px 0 0; border: 0.5px solid var(--border2); border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="splash-logo"><i class="ti ti-brain"></i></div>
+  <h1>CognitiveCare</h1>
+  <p>Brain wellness, every day</p>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goto('home',this)"><i class="ti ti-home"></i>Home</button>
+  <button class="nav-btn" onclick="goto('gamma',this)"><i class="ti ti-bulb"></i>Gamma</button>
+  <button class="nav-btn" onclick="goto('game',this)"><i class="ti ti-puzzle"></i>Train</button>
+  <button class="nav-btn" onclick="goto('habits',this)"><i class="ti ti-checklist"></i>Habits</button>
+  <button class="nav-btn" onclick="goto('breath',this)"><i class="ti ti-wind"></i>Breathe</button>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="home">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="greeting">Good morning</div>
+      <div class="page-sub" id="today-date"></div>
+    </div>
+    <span class="pill pill-gold"><i class="ti ti-flame"></i><span id="streak-count">7</span>-day streak</span>
+  </div>
+
+  <div class="section-label">This week</div>
+  <div class="streak-row" id="streak-row"></div>
+
+  <div class="grid2">
+    <div class="stat"><div class="stat-label">Sessions done</div><div class="stat-val">24 <span class="stat-unit">/ mo</span></div></div>
+    <div class="stat"><div class="stat-label">Brain score</div><div class="stat-val">82 <span class="stat-unit">/ 100</span></div></div>
+  </div>
+
+  <div class="section-label">Today's plan</div>
+  <div class="card card-sm">
+    <div class="task-row">
+      <div class="task-icon" style="background:var(--accent-light)"><i class="ti ti-bulb" style="color:var(--accent)"></i></div>
+      <div class="task-info"><div class="task-name">40Hz Gamma Therapy</div><div class="task-sub">20 min · evidence-backed</div></div>
+      <div class="task-cta" onclick="gotoTab('gamma')">Start →</div>
+    </div>
+    <div class="task-row">
+      <div class="task-icon" style="background:var(--accent2-light)"><i class="ti ti-puzzle" style="color:var(--accent2)"></i></div>
+      <div class="task-info"><div class="task-name">Memory Training</div><div class="task-sub">5 min · hippocampus workout</div></div>
+      <div class="task-cta" onclick="gotoTab('game')">Start →</div>
+    </div>
+    <div class="task-row">
+      <div class="task-icon" style="background:var(--accent3-light)"><i class="ti ti-wind" style="color:var(--accent3)"></i></div>
+      <div class="task-info"><div class="task-name">Breathing Session</div><div class="task-sub">5 min · cortisol reset</div></div>
+      <div class="task-cta" onclick="gotoTab('breath')">Start →</div>
+    </div>
+  </div>
+
+  <div class="section-label">The science</div>
+  <div class="science-note">
+    Research from <strong>MIT, Harvard,</strong> and the <strong>Lancet Commission</strong> shows up to <strong>40% of dementia cases</strong> may be preventable through lifestyle. This app combines gamma light entrainment, cognitive training, breathwork, and daily habit tracking — all evidence-backed approaches.
+  </div>
+  <div class="card card-sm">
+    <div style="font-size:13px;color:var(--muted);line-height:1.7">
+      ⚠️ <strong style="color:var(--text)">Medical notice:</strong> This app is a wellness support tool, not a medical device. Always consult a neurologist or physician about your care plan.
+    </div>
+  </div>
+</div>
+
+<!-- GAMMA -->
+<div class="page" id="gamma">
+  <div class="page-header">
+    <div>
+      <div class="page-title">40Hz Gamma</div>
+      <div class="page-sub">MIT GENUS Protocol · flickering light therapy</div>
+    </div>
+    <span class="pill pill-green">Beta</span>
+  </div>
+
+  <div class="gamma-screen">
+    <div id="gamma-flash"></div>
+    <div class="gamma-overlay">
+      <div class="gamma-hz">40</div>
+      <div>Hz gamma entrainment</div>
+      <div id="gamma-status-text" style="margin-top:8px;font-size:12px">Press Start to begin</div>
+    </div>
+  </div>
+
+  <div class="timer-wrap">
+    <div class="timer-ring">
+      <svg width="110" height="110" viewBox="0 0 110 110">
+        <circle cx="55" cy="55" r="45" fill="none" stroke="var(--surface2)" stroke-width="7"/>
+        <circle id="gamma-ring-fill" cx="55" cy="55" r="45" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <div class="timer-center">
+        <div class="timer-big" id="gamma-time">20:00</div>
+        <div class="timer-lbl">remaining</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Session length</div>
+  <div class="dur-row" id="gamma-durs">
+    <button class="dur-opt" onclick="setGammaDur(5,this)">5 min</button>
+    <button class="dur-opt selected" onclick="setGammaDur(20,this)">20 min</button>
+    <button class="dur-opt" onclick="setGammaDur(60,this)">60 min</button>
+  </div>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn btn-primary btn-full btn-lg" id="gamma-btn" onclick="toggleGamma()">
+      <i class="ti ti-player-play" id="gamma-btn-icon"></i><span id="gamma-btn-text">Start Session</span>
+    </button>
+    <button class="btn btn-secondary btn-icon" onclick="resetGamma()"><i class="ti ti-refresh"></i></button>
+  </div>
+
+  <div class="section-label">How it works</div>
+  <div class="science-note">
+    MIT's Tsai Lab found that <strong>40Hz light flicker</strong> entrains gamma brainwaves, activating microglia to clear amyloid-beta plaques linked to Alzheimer's. Early human trials (GENUS study) showed reduced brain atrophy and some cognitive stabilization over 3–6 months of daily use.
+  </div>
+  <div class="card card-sm" style="font-size:13px;color:var(--muted)">
+    <strong style="color:var(--text)">Tip:</strong> Dim the room, sit comfortably, and focus gently on the screen. Do not use if you have photosensitive epilepsy. Pair with 40Hz binaural audio (search YouTube) for enhanced effect.
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="page" id="game">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Memory Train</div>
+      <div class="page-sub">Match all pairs — trains hippocampus & recall</div>
+    </div>
+    <span class="pill pill-purple">Level <span id="game-level-num">1</span></span>
+  </div>
+
+  <div class="game-meta">
+    <span style="font-size:13px;color:var(--muted)">Moves: <strong id="moves" style="color:var(--text)">0</strong></span>
+    <span style="font-size:13px;color:var(--muted)">Best: <strong id="best-score" style="color:var(--text)">—</strong></span>
+  </div>
+  <div class="game-status" id="game-status">Tap a card to begin</div>
+  <div id="game-grid"></div>
+  <button class="btn btn-secondary btn-full" onclick="initGame()" style="margin-top:4px"><i class="ti ti-refresh"></i>New Game</button>
+
+  <div class="section-label">Why this helps</div>
+  <div class="science-note">
+    Memory matching engages the <strong>hippocampus and prefrontal cortex</strong> — the regions most affected early in Alzheimer's. The FINGER trial found regular cognitive training associated with a <strong>29% lower risk</strong> of dementia in at-risk adults.
+  </div>
+</div>
+
+<!-- HABITS -->
+<div class="page" id="habits">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Daily Habits</div>
+      <div class="page-sub">Lancet Commission's modifiable risk factors</div>
+    </div>
+  </div>
+
+  <div class="card card-sm" style="margin-bottom:12px">
+    <div id="habit-score-row">
+      <span style="font-size:14px;font-weight:500">Today's score</span>
+      <span class="pill pill-green" id="habit-pill">3 / 6 complete</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="habit-bar" style="width:50%;background:var(--accent)"></div></div>
+    <div style="font-size:12px;color:var(--muted)" id="habit-message">Good start — keep going!</div>
+  </div>
+
+  <div class="card" style="padding:4px 16px">
+    <div class="habit-row">
+      <div class="habit-icon" style="background:var(--accent-light)"><i class="ti ti-run" style="color:var(--accent)"></i></div>
+      <div class="habit-info"><div class="habit-name">Exercise 30+ min</div><div class="habit-desc">Increases BDNF, protects hippocampus</div></div>
+      <button class="toggle on" onclick="toggleHabit(this)"></button>
+    </div>
+    <div class="habit-row">
+      <div class="habit-icon" style="background:var(--gold-light)"><i class="ti ti-moon" style="color:var(--gold)"></i></div>
+      <div class="habit-info"><div class="habit-name">Sleep 7–9 hours</div><div class="habit-desc">Glymphatic system clears amyloid</div></div>
+      <button class="toggle on" onclick="toggleHabit(this)"></button>
+    </div>
+    <div class="habit-row">
+      <div class="habit-icon" style="background:var(--accent2-light)"><i class="ti ti-salad" style="color:var(--accent2)"></i></div>
+      <div class="habit-info"><div class="habit-name">Mediterranean diet</div><div class="habit-desc">Omega-3s, antioxidants, anti-inflammatory</div></div>
+      <button class="toggle on" onclick="toggleHabit(this)"></button>
+    </div>
+    <div class="habit-row">
+      <div class="habit-icon" style="background:var(--blue-light)"><i class="ti ti-users" style="color:var(--blue)"></i></div>
+      <div class="habit-info"><div class="habit-name">Social interaction</div><div class="habit-desc">Reduces isolation — key risk factor</div></div>
+      <button class="toggle" onclick="toggleHabit(this)"></button>
+    </div>
+    <div class="habit-row">
+      <div class="habit-icon" style="background:var(--red-light)"><i class="ti ti-heart-rate-monitor" style="color:var(--red)"></i></div>
+      <div class="habit-info"><div class="habit-name">Blood pressure check</div><div class="habit-desc">Midlife hypertension = #1 risk factor</div></div>
+      <button class="toggle" onclick="toggleHabit(this)"></button>
+    </div>
+    <div class="habit-row">
+      <div class="habit-icon" style="background:var(--accent3-light)"><i class="ti ti-book" style="color:var(--accent3)"></i></div>
+      <div class="habit-info"><div class="habit-name">Learn something new</div><div class="habit-desc">Builds cognitive reserve &amp; resilience</div></div>
+      <button class="toggle" onclick="toggleHabit(this)"></button>
+    </div>
+  </div>
+
+  <div class="section-label">Why habits matter most</div>
+  <div class="science-note">
+    The <strong>2024 Lancet Commission</strong> identified 14 modifiable lifestyle factors accounting for roughly <strong>45% of dementia cases worldwide</strong>. Small daily actions compound into meaningful brain protection over years.
+  </div>
+</div>
+
+<!-- BREATHE -->
+<div class="page" id="breath">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Breathwork</div>
+      <div class="page-sub">Cortisol reduction · parasympathetic activation</div>
+    </div>
+  </div>
+
+  <div class="breath-center">
+    <div id="breath-phase">Ready</div>
+    <div id="breath-circle">—</div>
+    <div id="breath-info">Choose a pattern and press Start</div>
+  </div>
+
+  <div class="section-label">Pattern</div>
+  <div class="dur-row" id="breath-modes">
+    <button class="dur-opt selected" onclick="setBreathMode('box',this)">Box 4-4-4-4</button>
+    <button class="dur-opt" onclick="setBreathMode('478',this)">4-7-8 Sleep</button>
+    <button class="dur-opt" onclick="setBreathMode('calm',this)">Calm 5-5</button>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-top:4px">
+    <button class="btn btn-primary btn-full btn-lg" id="breath-btn" onclick="toggleBreath()">
+      <i class="ti ti-player-play" id="breath-btn-icon"></i><span id="breath-btn-text">Start</span>
+    </button>
+    <button class="btn btn-secondary btn-icon" onclick="resetBreath()"><i class="ti ti-refresh"></i></button>
+  </div>
+
+  <div class="section-label">Why it helps</div>
+  <div class="science-note">
+    Chronic stress elevates <strong>cortisol</strong>, which shrinks the hippocampus over time. Daily breathing practice activates the parasympathetic nervous system, lowers cortisol, and may slow hippocampal atrophy associated with Alzheimer's risk.
+  </div>
+</div>
+
+<script>
+// SPLASH
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const s = document.getElementById('splash');
+    s.style.opacity = '0';
+    setTimeout(() => s.style.display = 'none', 600);
+  }, 1600);
+});
+
+// GREETING + DATE
+(function() {
+  const h = new Date().getHours();
+  document.getElementById('greeting').textContent = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const now = new Date();
+  document.getElementById('today-date').textContent = days[now.getDay()] + ' · ' + months[now.getMonth()] + ' ' + now.getDate();
+})();
+
+// STREAK
+(function() {
+  const row = document.getElementById('streak-row');
+  const labels = ['M','T','W','T','F','Sa','Su'];
+  const today = new Date().getDay();
+  const todayIdx = today === 0 ? 6 : today - 1;
+  labels.forEach((l, i) => {
+    const d = document.createElement('div');
+    d.className = 'sday' + (i < todayIdx ? ' done' : i === todayIdx ? ' today' : '');
+    d.innerHTML = i < todayIdx
+      ? '<i class="ti ti-check"></i><span>' + l + '</span>'
+      : '<span>' + l + '</span><span style="font-size:8px">' + (i === todayIdx ? '•' : '') + '</span>';
+    row.appendChild(d);
+  });
+})();
+
+// NAV
+function goto(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function gotoTab(id) {
+  const map = { home:0, gamma:1, game:2, habits:3, breath:4 };
+  goto(id, document.querySelectorAll('.nav-btn')[map[id]]);
+}
+
+// GAMMA
+let gammaDur = 20*60, gammaLeft = 20*60, gammaRunning = false;
+let gammaInterval = null, gammaAnim = null;
+
+function setGammaDur(min, el) {
+  if (gammaRunning) return;
+  document.querySelectorAll('#gamma-durs .dur-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  gammaDur = min * 60; gammaLeft = gammaDur;
+  updateGammaUI();
+}
+function updateGammaUI() {
+  const m = Math.floor(gammaLeft / 60), s = gammaLeft % 60;
+  document.getElementById('gamma-time').textContent = m + ':' + String(s).padStart(2,'0');
+  const circ = 2 * Math.PI * 45;
+  document.getElementById('gamma-ring-fill').style.strokeDashoffset = Math.round(circ * (1 - gammaLeft / gammaDur));
+}
+function toggleGamma() {
+  if (!gammaRunning) {
+    gammaRunning = true;
+    document.getElementById('gamma-btn-text').textContent = 'Pause';
+    document.getElementById('gamma-btn-icon').className = 'ti ti-player-pause';
+    document.getElementById('gamma-status-text').textContent = '40Hz · Active';
+    startFlash();
+    gammaInterval = setInterval(() => {
+      gammaLeft--;
+      updateGammaUI();
+      if (gammaLeft <= 0) { resetGamma(); document.getElementById('gamma-status-text').textContent = '✓ Session complete!'; }
+    }, 1000);
+  } else {
+    gammaRunning = false;
+    clearInterval(gammaInterval);
+    cancelAnimationFrame(gammaAnim);
+    document.getElementById('gamma-flash').style.opacity = 0;
+    document.getElementById('gamma-btn-text').textContent = 'Resume';
+    document.getElementById('gamma-btn-icon').className = 'ti ti-player-play';
+    document.getElementById('gamma-status-text').textContent = 'Paused';
+  }
+}
+function resetGamma() {
+  gammaRunning = false;
+  clearInterval(gammaInterval);
+  cancelAnimationFrame(gammaAnim);
+  gammaLeft = gammaDur;
+  document.getElementById('gamma-flash').style.opacity = 0;
+  document.getElementById('gamma-btn-text').textContent = 'Start Session';
+  document.getElementById('gamma-btn-icon').className = 'ti ti-player-play';
+  document.getElementById('gamma-status-text').textContent = 'Press Start to begin';
+  updateGammaUI();
+}
+function startFlash() {
+  const flash = document.getElementById('gamma-flash');
+  const halfPeriod = 1000 / 40 / 2;
+  let last = 0, on = false;
+  function frame(ts) {
+    if (!gammaRunning) { flash.style.opacity = 0; return; }
+    if (ts - last >= halfPeriod) { on = !on; flash.style.opacity = on ? '1' : '0'; last = ts; }
+    gammaAnim = requestAnimationFrame(frame);
+  }
+  gammaAnim = requestAnimationFrame(frame);
+}
+
+// GAME
+const EMOJIS = ['🌸','🦋','🌙','⭐','🍀','🦊','🎵','🌈'];
+let flipped = [], matched = 0, moves = 0, canFlip = true, bestScore = null;
+
+function initGame() {
+  const pairs = [...EMOJIS, ...EMOJIS].sort(() => Math.random() - 0.5);
+  flipped = []; matched = 0; moves = 0; canFlip = true;
+  document.getElementById('moves').textContent = '0';
+  document.getElementById('game-status').textContent = 'Tap a card to begin';
+  const grid = document.getElementById('game-grid');
+  grid.innerHTML = '';
+  pairs.forEach(emoji => {
+    const c = document.createElement('div');
+    c.className = 'mcard';
+    c.innerHTML = '<span>' + emoji + '</span>';
+    c.dataset.val = emoji;
+    c.addEventListener('click', () => flipCard(c));
+    grid.appendChild(c);
+  });
+}
+function flipCard(c) {
+  if (!canFlip || c.classList.contains('matched') || flipped.includes(c) || c.classList.contains('show')) return;
+  c.classList.add('show'); flipped.push(c);
+  if (flipped.length === 2) {
+    moves++; document.getElementById('moves').textContent = moves;
+    canFlip = false;
+    const [a, b] = flipped;
+    if (a.dataset.val === b.dataset.val) {
+      a.classList.add('matched'); b.classList.add('matched');
+      matched++; flipped = []; canFlip = true;
+      if (matched === 8) {
+        document.getElementById('game-status').textContent = '🎉 Complete in ' + moves + ' moves!';
+        if (bestScore === null || moves < bestScore) { bestScore = moves; document.getElementById('best-score').textContent = moves; }
+      } else {
+        document.getElementById('game-status').textContent = matched + ' of 8 pairs found';
+      }
+    } else {
+      document.getElementById('game-status').textContent = 'Not a match — try again';
+      setTimeout(() => { a.classList.remove('show'); b.classList.remove('show'); flipped = []; canFlip = true; document.getElementById('game-status').textContent = matched + ' of 8 pairs found'; }, 950);
+    }
+  }
+}
+initGame();
+
+// HABITS
+function toggleHabit(btn) { btn.classList.toggle('on'); updateHabits(); }
+function updateHabits() {
+  const total = document.querySelectorAll('.toggle').length;
+  const done  = document.querySelectorAll('.toggle.on').length;
+  const pct = Math.round(done / total * 100);
+  document.getElementById('habit-pill').textContent = done + ' / ' + total + ' complete';
+  document.getElementById('habit-bar').style.width = pct + '%';
+  const msgs = ['Every habit counts — start here!','Good start — keep going!','Halfway there — great work!','Strong day — almost there!','Outstanding — perfect score! 🎉'];
+  const idx = done === total ? 4 : done > total * 0.75 ? 3 : done > total * 0.5 ? 2 : done > 0 ? 1 : 0;
+  document.getElementById('habit-message').textContent = msgs[idx];
+}
+
+// BREATHING
+const BREATH_MODES = {
+  box:  [['Inhale',4],['Hold',4],['Exhale',4],['Hold',4]],
+  '478':[['Inhale',4],['Hold',7],['Exhale',8]],
+  calm: [['Inhale',5],['Exhale',5]]
+};
+const BREATH_COLORS = { Inhale:'#3d6b4f', Hold:'#7c5cbf', Exhale:'#c4601a' };
+const BREATH_SIZES  = { Inhale:'190px', Hold:'190px', Exhale:'140px' };
+let breathMode = 'box', breathRunning = false;
+let breathPhase = 0, breathSec = 0, breathCycles = 0, breathTimer = null;
+
+function setBreathMode(m, el) {
+  if (breathRunning) return;
+  document.querySelectorAll('#breath-modes .dur-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected'); breathMode = m;
+}
+function toggleBreath() {
+  if (!breathRunning) {
+    breathRunning = true; breathPhase = 0; breathSec = 0; breathCycles = 0;
+    document.getElementById('breath-btn-text').textContent = 'Pause';
+    document.getElementById('breath-btn-icon').className = 'ti ti-player-pause';
+    runBreath();
+  } else {
+    breathRunning = false; clearTimeout(breathTimer);
+    document.getElementById('breath-btn-text').textContent = 'Resume';
+    document.getElementById('breath-btn-icon').className = 'ti ti-player-play';
+  }
+}
+function resetBreath() {
+  breathRunning = false; clearTimeout(breathTimer);
+  breathPhase = 0; breathSec = 0; breathCycles = 0;
+  document.getElementById('breath-btn-text').textContent = 'Start';
+  document.getElementById('breath-btn-icon').className = 'ti ti-player-play';
+  document.getElementById('breath-phase').textContent = 'Ready';
+  document.getElementById('breath-info').textContent = 'Choose a pattern and press Start';
+  const c = document.getElementById('breath-circle');
+  c.textContent = '—'; c.style.width = c.style.height = '150px'; c.style.background = 'var(--accent)';
+}
+function runBreath() {
+  if (!breathRunning) return;
+  const phases = BREATH_MODES[breathMode];
+  const [name, dur] = phases[breathPhase];
+  const remaining = dur - breathSec;
+  const circle = document.getElementById('breath-circle');
+  document.getElementById('breath-phase').textContent = name;
+  circle.textContent = remaining;
+  document.getElementById('breath-info').textContent = 'Cycle ' + (breathCycles + 1) + '  ·  ' + name.toLowerCase() + '…';
+  if (breathSec === 0) {
+    circle.style.width = circle.style.height = BREATH_SIZES[name] || '150px';
+    circle.style.background = BREATH_COLORS[name] || 'var(--accent)';
+  }
+  breathSec++;
+  if (breathSec >= dur) { breathSec = 0; breathPhase++; if (breathPhase >= phases.length) { breathPhase = 0; breathCycles++; } }
+  breathTimer = setTimeout(runBreath, 1000);
+}
+</script>
+</body>
+</html>
